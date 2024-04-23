@@ -44,3 +44,12 @@ export const product1 = {
     size: 'XS',
     color: 'Purple'
 }
+
+export const hotSellerProducts = {
+    product1: {code: 'Radiant Tee Rating: 60% 3', hasSizesAndColor: true, sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Blue', 'Orange', 'Purple']},
+    product2: {code: 'Breathe-Easy Tank Rating: 70', hasSizesAndColor: true, sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Purple', 'White', 'Yellow']},
+    product3: {code: 'Argus All-Weather Tank As low', hasSizesAndColor: true, sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Gray']},
+    product4: {code: 'Hero Hoodie As low as $54.00', hasSizesAndColor: true, sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Black', 'Gray', 'Green']},
+    product5: {code: 'Fusion Backpack Rating: 67% 3', hasSizesAndColor: false},
+    product6: {code:'Push It Messenger Bag Rating', hasSizesAndColor: false}
+}

@@ -59,7 +59,8 @@ test.describe('Go to log in page first', () => {
     
         // Click 'Remove' button
         await page.getByText('Remove').click()
-    
+        
+        // Accept action in dialog window
         await page.locator('[class="action-primary action-accept"]').click()
     
         // Verify the cart is empty

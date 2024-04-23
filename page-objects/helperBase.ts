@@ -23,10 +23,9 @@ export class HelperBase{
      *  
      */
     async chooseProductWithSizeAndColor(productCode: string, size: string,  color: string){
-        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).click()
+        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, {exact: true}).click()
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).click()
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
-        // await this.page.waitForTimeout(5000)
     }
 
     /**
@@ -67,5 +66,10 @@ export class HelperBase{
             password: password
         }
     }
+
+    async randomProperty(obj) {
+        var keys = Object.keys(obj);
+        return obj[keys[ keys.length * Math.random() << 0]];
+    };
 
 }
