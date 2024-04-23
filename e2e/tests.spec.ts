@@ -59,4 +59,19 @@ test('Error message is there while registering with existing email', async({page
     await expect(page.getByText('There is already')).toBeVisible();
 });
 
+test('Error message while log in with incorrect credentials', async({page}) => {
+        // Setup:
+        const pm = new PageManager(page); // Create a PageManager for page interactions
+        await pm.navigateTo().signInPage()
+
+        // Generate a random user (note: this assumes the helper function does NOT use the existing user's email)
+        const user = pm.fromHelperBase().genRandomUser(); // Navigate to sign-in
+
+        await pm.onSignInPage().signInWithCredentials((await user).email, (await user).password) // Sign in
+
+        // Assert that the expected error message is displayed 
+        await expect(page.getByText('The account sign-in was')).toBeVisible();
+        
+})
+
 
