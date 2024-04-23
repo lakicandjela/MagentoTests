@@ -38,4 +38,25 @@ test('Removing item completely from the cart in the cart menu', async({page}) =>
 
 })
 
+test('Error message is there while registering with existing email', async({page}) => {
+    // Setup:
+    const pm = new PageManager(page); // Create a PageManager for page interactions
+    await pm.navigateTo().createAccountPage(); // Go to the account creation page
+
+    // Generate a random user (note: this assumes the helper function does NOT use the existing user's email)
+    const user = pm.fromHelperBase().genRandomUser(); 
+
+    // Attempt to create an account using the existing user's email but random other details
+    await pm.onCreateAccountPage().createAccountWithCredentials(
+        (await user).firstName, 
+        (await user).lastName, 
+        exsistingUser.email, // Deliberately using the existing email
+        (await user).password, 
+        (await user).password 
+    );
+
+    // Assert that the expected error message is displayed 
+    await expect(page.getByText('There is already')).toBeVisible();
+});
+
 
