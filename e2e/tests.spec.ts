@@ -68,8 +68,8 @@ test.describe('Go to log in page first', () => {
 
     test('Error message while log in with incorrect credentials', async({page}) => {
         const pm = new PageManager(page)  // Create a page manager for interactions
-        // Generate a random user (note: this assumes the helper function does NOT use the existing user's email)
-        const user = pm.fromHelperBase().genRandomUser(); // Navigate to sign-in
+        // Generate a random user 
+        const user = pm.fromHelperBase().genRandomUser();
 
         await pm.onSignInPage().signInWithCredentials((await user).email, (await user).password) // Sign in
 
