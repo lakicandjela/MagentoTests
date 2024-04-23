@@ -1,5 +1,6 @@
-import {Locator, Page} from '@playwright/test'
+import {Locator, Page, expect} from '@playwright/test'
 import { HelperBase } from './helperBase'
+import { navigationMap } from '../helper/data';
 
 
 export class NavigationPage {
@@ -9,40 +10,23 @@ export class NavigationPage {
         this.page = page;    
     }
 
-    // Structure your navigation map
-    readonly navigationMap = {
-        whatsNew: 3,
-        women: 4, 
-        men: 5, 
-        gear: 6,
-        training: 7,
-        sale: 8,
-        womenTops: 9,
-        womenBottoms: 10,
-        menTops: 17,
-        menBottoms: 18,
-        gearBags: 25,
-        gearFitnessEquipment: 26,
-        gearWatches: 27,
-        trainingVideo: 28,
-        womenTopsJackets: 11,
-        womenTopsHoodiesSweatshirts: 12,
-        womenTopsTees: 13,
-        womenTopsBrasTanks: 14,
-        womenBottomsPants: 15,
-        womenBottomsShorts: 16,
-        menTopsJackets: 19,
-        menTopsHoodiesSweatshirts: 20,
-        menTopsTees: 21,
-        menTopsBrasTanks: 22,
-        menBottomsPants: 23,
-        menBottomsShorts: 24,
-        }
-
-
     async productsPage(pageName: string) {
-        const menuItemId = this.navigationMap[pageName];
-        await this.page.locator(`#ui-id-${menuItemId}`).click();
+        const menuItemId = navigationMap[pageName]; // Assume 'navigationMap' is an object mapping pages to menu item IDs
+        const leng = menuItemId.length 
+    
+        if(menuItemId.length === 1){ 
+            // Single-level menu: Click directly
+            await this.page.locator(`#ui-id-${menuItemId[0]}`).click(); 
+        } else if(menuItemId.length === 2){ 
+            // Two-level menu: Hover on the first level, click the second
+            await this.page.locator(`#ui-id-${menuItemId[0]}`).hover(); 
+            await this.page.locator(`#ui-id-${menuItemId[1]}`).click(); 
+        } else {
+            // Three-Level menu: Hover, hover, click
+            await this.page.locator(`#ui-id-${menuItemId[0]}`).hover(); 
+            await this.page.locator(`#ui-id-${menuItemId[1]}`).hover(); 
+            await this.page.locator(`#ui-id-${menuItemId[2]}`).click(); 
+        }
     }
 
     async signInPage(){

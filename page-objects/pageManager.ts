@@ -3,6 +3,7 @@ import { NavigationPage } from './navigationPage'
 import { SignInPage } from './signInPage'
 import { CreateAccountPage } from './createAccountPage'
 import { CheckoutPage } from './checkoutPage'
+import { HelperBase } from './helperBase'
 
 export class PageManager{
 
@@ -11,6 +12,7 @@ export class PageManager{
     private readonly signInPage: SignInPage
     private readonly createAccountPage: CreateAccountPage
     private readonly checkoutPage: CheckoutPage
+    private readonly helperBase: HelperBase
 
     constructor(page: Page){
         this.page = page
@@ -18,6 +20,7 @@ export class PageManager{
         this.signInPage = new SignInPage(this.page)
         this.createAccountPage = new CreateAccountPage(this.page)
         this.checkoutPage = new CheckoutPage(this.page)
+        this.helperBase = new HelperBase(this.page)
     }
 
     navigateTo(){
@@ -34,5 +37,9 @@ export class PageManager{
 
     onCheckoutPage(){
         return this.checkoutPage
+    }
+
+    fromHelperBase(){
+        return this.helperBase
     }
 }

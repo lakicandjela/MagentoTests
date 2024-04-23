@@ -7,6 +7,13 @@ export class SignInPage extends HelperBase{
         super(page)
     }
 
+    /**
+     * Asynchronously performs a sign-in action on the site using provided credentials.
+     *
+     * @param {string} email - The email address of the user.
+     * @param {string} password - The user's password.
+     * 
+     */
     async signInWithCredentials(email: string, password: string){
         await this.page.locator('#email').fill(email)
 	    await this.page.locator('#pass').fill(password)
