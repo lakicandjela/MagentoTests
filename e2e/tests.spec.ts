@@ -32,14 +32,15 @@ test('Error message is there while registering with existing email', async({page
 
 
 test.describe('Go to log in page first', () => {
+    let pm: PageManager
     test.beforeEach( async ({page}) => {
         // Setup:
-        const pm = new PageManager(page)  // Create a page manager for interactions
+        pm = new PageManager(page)  // Create a page manager for interactions
         await pm.navigateTo().signInPage() // Navigate to sign-in
     })
 
     test('Removing item completely from the cart in the cart menu', async({page}) => {
-        const pm = new PageManager(page)  // Create a page manager for interactions
+        // const pm = new PageManager(page)  // Create a page manager for interactions
         pm.onSignInPage().signInWithCredentials(exsistingUser.email, exsistingUser.password) // Sign in
     
         // Record initial cart counter value
@@ -67,7 +68,7 @@ test.describe('Go to log in page first', () => {
     })
 
     test('Error message while log in with incorrect credentials', async({page}) => {
-        const pm = new PageManager(page)  // Create a page manager for interactions
+        // const pm = new PageManager(page)  // Create a page manager for interactions
         // Generate a random user 
         const user = pm.fromHelperBase().genRandomUser();
 
