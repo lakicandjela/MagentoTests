@@ -1,10 +1,13 @@
-import { Page } from '@playwright/test'
+import { Page, Locator } from '@playwright/test'
 import { HelperBase } from './helperBase'
 
 export class CreateAccountPage extends HelperBase {
+    readonly createAccountPageTitle: Locator
 
     constructor(page: Page) {
         super(page)
+        this.createAccountPageTitle = page.getByText('Create New Customer Account')
+
     }
 
     /**

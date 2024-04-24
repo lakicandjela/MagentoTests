@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
-import { exsistingUser, product1 } from "../helper/data"
+import { existingUser } from "../helper/data"
 
 
 test.beforeEach(async ({ page }) => {
@@ -12,6 +12,7 @@ test('Error message is there while registering with existing email', async ({ pa
     // Setup:
     const pm = new PageManager(page); // Create a PageManager for page interactions
     await pm.navigateTo().createAccountPage(); // Go to the account creation page
+    await expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
 
     // Generate a random user (note: this assumes the helper function does NOT use the existing user's email)
     const user = pm.fromHelperBase().genRandomUser();
@@ -20,7 +21,7 @@ test('Error message is there while registering with existing email', async ({ pa
     await pm.onCreateAccountPage().createAccountWithCredentials(
         (await user).firstName,
         (await user).lastName,
-        exsistingUser.email, // Deliberately using the existing email
+        existingUser.email, // Deliberately using the existing email
         (await user).password,
         (await user).password
     );
