@@ -4,7 +4,9 @@ import { existingUser } from "../helper/data"
 
 
 test.beforeEach(async ({ page }) => {
+    const pm = new PageManager(page);
     await page.goto('/')
+    await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
 

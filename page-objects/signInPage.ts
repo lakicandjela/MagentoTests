@@ -3,10 +3,12 @@ import { HelperBase } from './helperBase'
 
 export class SignInPage extends HelperBase {
     readonly loginPageTitle: Locator
+    readonly loginNotSuccessfulMessage: Locator
 
     constructor(page: Page) {
         super(page)
         this.loginPageTitle = page.getByText('Customer Login')
+        this.loginNotSuccessfulMessage = page.getByText('The account sign-in was')
     }
 
     /**

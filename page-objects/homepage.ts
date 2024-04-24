@@ -11,6 +11,7 @@ export class Homepage {
     readonly bannerTitleWhenLoggedin: Locator
     readonly closeMinicartButton: Locator
     readonly removeFromCartPopupQuestionTitle: Locator
+    readonly storeLogo: Locator
 
     constructor(page: Page) {
         this.page = page;
@@ -22,5 +23,6 @@ export class Homepage {
         this.bannerTitleWhenLoggedin = page.getByRole('banner').getByText('Click “Write for us” link in')
         this.closeMinicartButton = page.locator('#btn-minicart-close')
         this.removeFromCartPopupQuestionTitle = page.getByText('Are you sure you would like')
+        this.storeLogo = page.getByLabel('store logo')
     }
 }
