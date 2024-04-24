@@ -1,10 +1,10 @@
-import {Page} from '@playwright/test'
+import { Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 import { ShippingRate } from '../helper/enums'
 
-export class CheckoutPage extends HelperBase{
+export class CheckoutPage extends HelperBase {
 
-    constructor(page: Page){
+    constructor(page: Page) {
         super(page)
     }
 
@@ -28,7 +28,7 @@ export class CheckoutPage extends HelperBase{
      */
     async checkoutWhileNotSignedIn(email: string, firstName: string, lastName: string, company: string, streetAddress1: string, streetAddress2: string,
         streetAddress3: string, city: string, zip: string, country: string, phoneNumber: string, stateProvince: string, shippingRate: ShippingRate
-    ){
+    ) {
         await this.page.waitForTimeout(2000)
         await this.page.locator('#checkout-step-shipping').locator('#customer-email-fieldset').getByRole('textbox').fill(email)
         await this.page.locator('#shipping-new-address-form').getByLabel('First Name').fill(firstName)
@@ -43,12 +43,12 @@ export class CheckoutPage extends HelperBase{
         await this.page.locator('#shipping-new-address-form').getByLabel('Phone Number').fill(phoneNumber)
 
         const classAtr = await this.page.getByText('State/Province Please Select').getAttribute("class")
-        if(classAtr=='field _required'){
+        if (classAtr == 'field _required') {
             // State/Province is a required dropdown
             await this.page.locator('select[name="region_id"]').selectOption(stateProvince)
-        } else if(classAtr=='field'){
+        } else if (classAtr == 'field') {
             // State/Province is a free-form text field
-            await this.page.getByRole('textbox', {name: 'State/Province'}).fill(stateProvince)
+            await this.page.getByRole('textbox', { name: 'State/Province' }).fill(stateProvince)
         }
 
         // Select Shipping Rate

@@ -1,10 +1,12 @@
-import {Page} from '@playwright/test'
+import { Page, Locator } from '@playwright/test'
 import { HelperBase } from './helperBase'
 
-export class SignInPage extends HelperBase{
+export class SignInPage extends HelperBase {
+    readonly loginPageTitle: Locator
 
-    constructor(page: Page){
+    constructor(page: Page) {
         super(page)
+        this.loginPageTitle = page.getByText('Customer Login')
     }
 
     /**
@@ -14,10 +16,10 @@ export class SignInPage extends HelperBase{
      * @param {string} password - The user's password.
      * 
      */
-    async signInWithCredentials(email: string, password: string){
+    async signInWithCredentials(email: string, password: string) {
         await this.page.locator('#email').fill(email)
-	    await this.page.locator('#pass').fill(password)
-	    await this.page.locator('#send2').click()
+        await this.page.locator('#pass').fill(password)
+        await this.page.locator('#send2').click()
     }
 
 }
