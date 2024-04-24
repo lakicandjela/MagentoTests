@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import { faker } from '@faker-js/faker'
 
 
@@ -24,9 +24,10 @@ export class HelperBase {
      */
     async chooseProductWithSizeAndColor(productCode: string, size: string, color: string) {
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).click()
+        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).click()
+        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
-        // await this.page.waitForTimeout(5000)
     }
 
     /**
