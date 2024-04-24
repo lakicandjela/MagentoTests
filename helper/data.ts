@@ -1,10 +1,10 @@
-import { faker } from "@faker-js/faker"
 
-
+// this map is used for navigation through the site
+// each button on the nav bar has its id, they are stored here
 export const navigationMap = {
     whatsNew: [3],
-    women: [4], 
-    men: [5], 
+    women: [4],
+    men: [5],
     gear: [6],
     training: [7],
     sale: [8],
@@ -28,16 +28,17 @@ export const navigationMap = {
     menTopsBrasTanks: [5, 17, 22],
     menBottomsPants: [5, 18, 23],
     menBottomsShorts: [5, 18, 24],
-    }
+}
 
-export const exsistingUser = {
-    firstName: 'Jane', 
-    lastName: 'Doe', 
+// data for an existing account, for easier log in tests
+export const existingUser = {
+    firstName: 'Jane',
+    lastName: 'Doe',
     email: 'testingmail@test.com',
     password: 'Test.1234'
 }
 
-
+// data for one of to products from home page
 export const product1 = {
     name: 'Radiant Tee',
     code: 'Radiant Tee Rating: 60% 3',
