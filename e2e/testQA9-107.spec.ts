@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
 
 test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page) 
+    const pm = new PageManager(page)
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
