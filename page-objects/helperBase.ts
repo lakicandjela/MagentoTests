@@ -1,15 +1,15 @@
-import { Page } from '@playwright/test'
-import {faker} from '@faker-js/faker'
+import { Page, expect } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 
 
-export class HelperBase{
+export class HelperBase {
     readonly page: Page
 
-    constructor(page: Page){
+    constructor(page: Page) {
         this.page = page
     }
 
-    async waitForNumberOfSeconds(timeInSeconds: number){
+    async waitForNumberOfSeconds(timeInSeconds: number) {
         await this.page.waitForTimeout(timeInSeconds * 1000)
     }
 
@@ -22,26 +22,12 @@ export class HelperBase{
      * @param {string} color - The desired color label of the product.
      *  
      */
-    async chooseProductWithSizeAndColor(productCode: string, size: string,  color: string){
-        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, {exact: true}).click()
+    async chooseProductWithSizeAndColor(productCode: string, size: string, color: string) {
+        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, { exact: true }).click()
+        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, { exact: true }).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).click()
+        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
-    }
-
-    /**
-     * Generates a random password of a specified length (default 12 characters).
-     * 
-     * @returns {string} The generated random password.
-     */
-    private genPassword() {
-        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var passwordLength = 12;
-        var password = "";
-        for (var i = 0; i <= passwordLength; i++) {
-            var randomNumber = Math.floor(Math.random() * chars.length);
-            password += chars.substring(randomNumber, randomNumber +1);
-        }
-        return password
     }
 
     /**
@@ -53,12 +39,12 @@ export class HelperBase{
      *   * email: {string} A formatted email (e.g., firstnamelastname###@test.com).
      *   * password: {string} A generated password.
      */
-    async genRandomUser(){
+    async genRandomUser() {
         var firstName = faker.person.firstName()
         var lastName = faker.person.lastName()
         var email = `${firstName.toLowerCase()}${lastName.toLowerCase()}${faker.number.int(1000)}@test.com`
-        var password = this.genPassword()
-    
+        var password = faker.internet.password()
+
         return {
             firstName: firstName,
             lastName: lastName,
@@ -69,7 +55,7 @@ export class HelperBase{
 
     async randomProperty(obj) {
         var keys = Object.keys(obj);
-        return obj[keys[ keys.length * Math.random() << 0]];
+        return obj[keys[keys.length * Math.random() << 0]];
     };
 
 }
