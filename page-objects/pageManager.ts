@@ -1,9 +1,10 @@
-import { Locator, Page } from '@playwright/test'
+import { Page } from '@playwright/test'
 import { NavigationPage } from './navigationPage'
 import { SignInPage } from './signInPage'
 import { CreateAccountPage } from './createAccountPage'
 import { CheckoutPage } from './checkoutPage'
 import { HelperBase } from './helperBase'
+import { Homepage } from './homepage'
 
 export class PageManager{
 
@@ -13,6 +14,7 @@ export class PageManager{
     private readonly createAccountPage: CreateAccountPage
     private readonly checkoutPage: CheckoutPage
     private readonly helperBase: HelperBase
+    private readonly homepage: Homepage
 
     constructor(page: Page){
         this.page = page
@@ -21,6 +23,7 @@ export class PageManager{
         this.createAccountPage = new CreateAccountPage(this.page)
         this.checkoutPage = new CheckoutPage(this.page)
         this.helperBase = new HelperBase(this.page)
+        this.homepage = new Homepage(this.page)
     }
 
     navigateTo(){
@@ -41,5 +44,9 @@ export class PageManager{
 
     fromHelperBase(){
         return this.helperBase
+    }
+
+    onHomepage(){
+        return this.homepage
     }
 }

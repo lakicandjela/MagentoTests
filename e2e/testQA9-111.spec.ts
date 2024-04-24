@@ -1,6 +1,5 @@
 import {test, expect} from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
-import {faker} from '@faker-js/faker'
 import { exsistingUser, product1 } from "../helper/data"
 
 
@@ -15,27 +14,27 @@ test('Removing item completely from the cart in the cart menu', async({page}) =>
     pm.onSignInPage().signInWithCredentials(exsistingUser.email, exsistingUser.password) // Sign in
 
     // Record initial cart counter value
-    const counter_before = await page.locator('.counter-number').textContent()
+    const counter_before = await pm.onHomepage().cartCounterLocator.textContent() 
 
-    // Add product using helper function
+    // Add product 
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
     // Verify product added by checking cart counter change
     await expect(async () => {
-		await expect(await page.locator('.counter-number').textContent()).not.toEqual(counter_before);
+		expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counter_before);
 	}).toPass();
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
+    await pm.onHomepage().minicartButton.click()
 
     // Click 'Remove' button
-    await page.getByText('Remove').click()
+    await pm.onHomepage().removeFromCartButton.click()
 
-    await page.locator('[class="action-primary action-accept"]').click()
+    // Approve removal from cart
+    await pm.onHomepage().approveRemovalFromCartButton.click()
 
     // Verify the cart is empty
-    await expect(page.getByText('You have no items in your')).toBeVisible()
-
+    await expect(pm.onHomepage().cartIsEmptyText).toBeVisible()
 })
 
 
