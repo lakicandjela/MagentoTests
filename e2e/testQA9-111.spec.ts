@@ -5,7 +5,6 @@ import { existingUser, product1 } from "../helper/data"
 let pm: PageManager
 
 test.beforeEach(async ({ page }) => {
-    // let pm: any
     pm = new PageManager(page);  // Create a page manager for interactions
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
