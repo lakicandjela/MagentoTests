@@ -26,6 +26,10 @@ export class HelperBase {
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
     }
 
+    async clickOnProduct(productCode: string) {
+        await this.page.locator('li').filter({ hasText: productCode }).click()
+    }
+
     /**
      * Asynchronously generates a randomized user object with first name, last name, email, and password.
      * 
