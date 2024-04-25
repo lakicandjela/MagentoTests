@@ -14,7 +14,7 @@ test('Error message is there while registering with existing email', async ({ pa
     // Setup:
     const pm = new PageManager(page); // Create a PageManager for page interactions
     await pm.navigateTo().createAccountPage(); // Go to the account creation page
-    await expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
+    expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
 
     // Generate a random user (note: this assumes the helper function does NOT use the existing user's email)
     const user = pm.fromHelperBase().genRandomUser();

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test('Error message while log in with incorrect credentials', async ({ page }) => {
     const pm = new PageManager(page)  // Create a page manager for interactions
     await pm.navigateTo().signInPage() // Navigate to sign-in
-    await expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
+    expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
 
     // Generate a random user 
     const user = pm.fromHelperBase().genRandomUser();

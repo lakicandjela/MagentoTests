@@ -17,7 +17,7 @@ test('Removing item completely from the cart in the cart menu', async ({ page })
 
     pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
 
-    await expect(pm.onHomepage().bannerTitleWhenLoggedin).toHaveText('Click “Write for us” link in the footer to submit a guest post')
+    expect(pm.onHomepage().bannerTitleWhenLoggedin).toHaveText('Click “Write for us” link in the footer to submit a guest post')
 
     // Record initial cart counter value
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
@@ -32,11 +32,11 @@ test('Removing item completely from the cart in the cart menu', async ({ page })
 
     // Open the cart menu
     await pm.onHomepage().minicartButton.click()
-    await expect(pm.onHomepage().closeMinicartButton).toBeVisible()
+    expect(pm.onHomepage().closeMinicartButton).toBeVisible()
 
     // Click 'Remove' button
     await pm.onHomepage().removeFromCartButton.click()
-    await expect(pm.onHomepage().removeFromCartPopupQuestionTitle).toBeVisible()
+    expect(pm.onHomepage().removeFromCartPopupQuestionTitle).toBeVisible()
 
     // Approve removal from cart
     await pm.onHomepage().approveRemovalFromCartButton.click()
