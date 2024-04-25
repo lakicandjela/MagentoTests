@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
-import { existingUser, product1 } from "../helper/data"
+import { existingUser, product1, review1 } from "../helper/data"
 
 let pm: PageManager
 
@@ -16,26 +16,13 @@ test.beforeEach(async ({ page }) => {
     expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 })
 
-test('Leave a review', async({page}) => {
-    // Record initial cart counter value
-    const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
-    
+test('Leave a review', async ({ page }) => {
+    // Navigate to the product details page:
     await pm.fromHelperBase().clickOnProduct(product1.code)
-    await page.getByRole('link', { name: 'Add Your Review' }).click()
-    await page.locator('[class="control review-control-vote"]').locator('#Rating_5').click({force: true})
-    // await page.getByLabel('Nickname').fill('dfsfds')
-    // await page.getByLabel('Summary').fill('dasdsda')
-    // await page.getByLabel('Review', { exact: true }).fill('duaihudi')
-    // await page.getByRole('button', { name: 'Submit Review' }).click()
-    // getByRole('link', { name: 'Add Your Review' })
-    // getByTitle('5 stars')
-    // getByLabel('Nickname')
-    // getByLabel('Summary')
-    // getByLabel('Review', { exact: true })
-    // getByRole('button', { name: 'Submit Review' })
 
+    // Submit a review for the selected product:
+    await pm.fromHelperBase().fillReview(review1)
 
-    // getByText('You submitted your review for')
-
-
+    // Verify review submission success:
+    await expect(page.getByText('You submitted your review for')).toBeVisible()
 })
