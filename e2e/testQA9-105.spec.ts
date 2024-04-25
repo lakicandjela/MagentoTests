@@ -110,8 +110,8 @@ test.describe('Items stay in cart after login with items from before', () => {
         numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
         // Sign out
-        await pm.onHomepage().openUserMenuButton.click()  
-        expect(pm.onHomepage().signOutButton).toBeVisible() 
+        await pm.onHomepage().openUserMenuButton.click()
+        expect(pm.onHomepage().signOutButton).toBeVisible()
         await pm.onHomepage().signOutButton.click() // Log out
         expect(page.getByText('You are signed out')).toBeVisible()
         await pm.onHomepage().storeLogo.click() // Go to home page
