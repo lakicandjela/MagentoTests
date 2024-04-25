@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
     // Sign in
     await pm.navigateTo().signInPage()
     expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-    pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
+    await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
     expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 })
 
@@ -20,8 +20,22 @@ test('Leave a review', async({page}) => {
     // Record initial cart counter value
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
     
-    pm.fromHelperBase().clickOnProduct(product1.code)
-    
+    await pm.fromHelperBase().clickOnProduct(product1.code)
+    await page.getByRole('link', { name: 'Add Your Review' }).click()
+    await page.locator('#Rating_5').click()
+    // await page.getByLabel('Nickname').fill('dfsfds')
+    // await page.getByLabel('Summary').fill('dasdsda')
+    // await page.getByLabel('Review', { exact: true }).fill('duaihudi')
+    // await page.getByRole('button', { name: 'Submit Review' }).click()
+    // getByRole('link', { name: 'Add Your Review' })
+    // getByTitle('5 stars')
+    // getByLabel('Nickname')
+    // getByLabel('Summary')
+    // getByLabel('Review', { exact: true })
+    // getByRole('button', { name: 'Submit Review' })
+
+
+    // getByText('You submitted your review for')
 
 
 })
