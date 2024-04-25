@@ -22,7 +22,7 @@ test('Leave a review', async({page}) => {
     
     await pm.fromHelperBase().clickOnProduct(product1.code)
     await page.getByRole('link', { name: 'Add Your Review' }).click()
-    await page.locator('#Rating_5').click()
+    await page.locator('[class="control review-control-vote"]').locator('#Rating_5').click({force: true})
     // await page.getByLabel('Nickname').fill('dfsfds')
     // await page.getByLabel('Summary').fill('dasdsda')
     // await page.getByLabel('Review', { exact: true }).fill('duaihudi')
