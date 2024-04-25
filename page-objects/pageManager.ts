@@ -7,7 +7,11 @@ import { HelperBase } from './helperBase'
 import { Homepage } from './homepage'
 
 export class PageManager {
-
+    /**
+     *
+     * Description. Class for navigation to other page classes on the site
+     *
+     */
     private readonly page: Page
     private readonly navigationPage: NavigationPage
     private readonly signInPage: SignInPage

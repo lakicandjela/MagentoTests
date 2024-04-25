@@ -1,33 +1,33 @@
-import { test, expect } from "@playwright/test"
+import { test, expect, Page } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
 import { existingUser, product1 } from "../helper/data"
 
+let pm: PageManager
 
 test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page)
+    pm = new PageManager(page)
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
 test('Items stay in cart after login', async ({ page }) => {
-    const pm = new PageManager(page)
-
     // Record initial cart counter value
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
-    await pm.onHomepage().minicartButton.click() //////////////////////////////
+    await pm.onHomepage().minicartButton.click()
+    expect(pm.onHomepage().closeMinicartButton).toBeVisible()
 
     const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
     // Add product
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color) //////////////
 
+    // Sign in
     await pm.navigateTo().signInPage()
     expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-    pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
-    // expect(pm.onHomepage().bannerTitleWhenLoggedin).toHaveText('Click “Write for us” link in the footer to submit a guest post')
-    
+    pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
+    expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 
     // Verify product added by checking cart counter change
     await expect(async () => {
@@ -35,7 +35,8 @@ test('Items stay in cart after login', async ({ page }) => {
     }).toPass();
 
     // Open the cart menu
-    await pm.onHomepage().minicartButton.click() ///////////////////////////////
+    await pm.onHomepage().minicartButton.click()
+    expect(pm.onHomepage().closeMinicartButton).toBeVisible()
     const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
     expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
@@ -43,13 +44,12 @@ test('Items stay in cart after login', async ({ page }) => {
 })
 
 test('Items stay in cart after create an account', async ({ page }) => {
-    const pm = new PageManager(page)
-
     // Record initial cart counter value
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
     await pm.onHomepage().minicartButton.click()
+    expect(pm.onHomepage().closeMinicartButton).toBeVisible()
 
     const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
@@ -57,6 +57,7 @@ test('Items stay in cart after create an account', async ({ page }) => {
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
     await pm.navigateTo().createAccountPage()
+    expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
 
     // Generate a random user
     const user = pm.fromHelperBase().genRandomUser();
@@ -69,6 +70,7 @@ test('Items stay in cart after create an account', async ({ page }) => {
         (await user).password,
         (await user).password
     );
+    expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user has created an account
 
     // Verify product added by checking cart counter change
     await expect(async () => {
@@ -77,24 +79,23 @@ test('Items stay in cart after create an account', async ({ page }) => {
 
     // Open the cart menu
     await pm.onHomepage().minicartButton.click()
+    expect(pm.onHomepage().closeMinicartButton).toBeVisible()
+
     const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
     expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
 })
 
-
-
 test.describe('Items stay in cart after login with items from before', () => {
     let numOfProductsBefore: number;
 
     test.beforeEach(async ({ page }) => {
-        const pm = new PageManager(page)
         ///////////////////////////////// Sign up, and add a product to cart
+        // Sign in
         await pm.navigateTo().signInPage()
-        await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
-
-        // Record initial cart counter value
-        var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
+        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
+        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
+        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 
         // Add product
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
@@ -105,25 +106,32 @@ test.describe('Items stay in cart after login with items from before', () => {
 
         // get the current number of products in cart
         await pm.onHomepage().minicartButton.click()
+        expect(pm.onHomepage().closeMinicartButton).toBeVisible()
         numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
-        await pm.onHomepage().openUserMenuButton.click()
+        // Sign out
+        await pm.onHomepage().openUserMenuButton.click()  
+        expect(pm.onHomepage().signOutButton).toBeVisible() 
         await pm.onHomepage().signOutButton.click() // Log out
+        expect(page.getByText('You are signed out')).toBeVisible()
         await pm.onHomepage().storeLogo.click() // Go to home page
+        expect(page.getByText('Hot Sellers')).toBeVisible()
     })
 
 
     test('Items stay in cart after login with items from before', async ({ page }) => {
-        const pm = new PageManager(page)
         ///////////////////////////////// Now, while logged out, user adds something in cart
-        // Update cart counter value
+        // Get cart counter value
         var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
         // Add product
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
+        // Sign in
         await pm.navigateTo().signInPage()
-        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
+        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
+        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
+        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 
         // Verify product added by checking cart counter change
         await expect(async () => {
@@ -132,6 +140,7 @@ test.describe('Items stay in cart after login with items from before', () => {
 
         // Open the cart menu
         await pm.onHomepage().minicartButton.click()
+        expect(pm.onHomepage().closeMinicartButton).toBeVisible()
         const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
         // while the user was logged out, he added only 1 product, so when logged back in the total
@@ -142,10 +151,11 @@ test.describe('Items stay in cart after login with items from before', () => {
 })
 
 test.afterEach(async ({ page }) => {
-    const pm = new PageManager(page)
     // Click 'Remove' button
     await pm.onHomepage().removeFromCartButton.click()
+    expect(pm.onHomepage().removeFromCartPopupQuestionTitle).toBeVisible()
 
     // Accept action in dialog window
     await pm.onHomepage().approveRemovalFromCartButton.click()
+    await expect(pm.onHomepage().cartIsEmptyText).toBeVisible()
 })

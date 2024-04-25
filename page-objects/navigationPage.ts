@@ -11,7 +11,6 @@ export class NavigationPage {
 
     async productsPage(pageName: string) {
         const menuItemId = navigationMap[pageName]; // Assume 'navigationMap' is an object mapping pages to menu item IDs
-        const leng = menuItemId.length
 
         if (menuItemId.length === 1) {
             // Single-level menu: Click directly
@@ -35,16 +34,4 @@ export class NavigationPage {
     async createAccountPage() {
         await this.page.getByRole('banner').getByRole('link', { name: 'Create an Account' }).click()
     }
-
-    async proceedToCheckoutPage() {
-        await this.page.locator('[class="minicart-wrapper"]').click()
-        await this.page.getByText('Proceed To Checkout').click()
-    }
-
-    async viewAndEditCartPage() {
-        await this.page.locator('[class="minicart-wrapper"]').click()
-        await this.page.getByText('View and Edit Cart').click() //cart
-    }
-
-
 }

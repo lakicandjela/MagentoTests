@@ -16,12 +16,13 @@ export class Homepage {
     readonly linkToCartMessageWhenProductAdded: Locator
     readonly openUserMenuButton: Locator
     readonly signOutButton: Locator
+    readonly openUserMenu: Locator
 
     constructor(page: Page) {
         this.page = page;
         this.cartCounterLocator = page.locator('.counter-number')
         this.minicartButton = page.locator('[class="minicart-wrapper"]')
-        this.removeFromCartButton = page.getByText('Remove')
+        this.removeFromCartButton = page.getByTitle('Remove item')
         this.approveRemovalFromCartButton = page.locator('[class="action-primary action-accept"]')
         this.cartIsEmptyText = page.getByText('You have no items in your')
         this.bannerTitleWhenLoggedin = page.getByRole('banner').getByText('Click “Write for us” link in')
@@ -32,6 +33,7 @@ export class Homepage {
         this.linkToCartMessageWhenProductAdded = page.getByRole('link', { name: 'shopping cart' })
         this.openUserMenuButton = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
         this.signOutButton = page.getByRole('link', { name: 'Sign Out' })
+        this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
 
     }
 }
