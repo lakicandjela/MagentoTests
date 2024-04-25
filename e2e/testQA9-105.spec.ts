@@ -21,7 +21,7 @@ test('Items stay in cart after login', async ({ page }) => {
     const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
     // Add product
-    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color) //////////////
+    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
     // Sign in
     await pm.navigateTo().signInPage()
