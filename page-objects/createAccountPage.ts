@@ -7,7 +7,6 @@ export class CreateAccountPage extends HelperBase {
     constructor(page: Page) {
         super(page)
         this.createAccountPageTitle = page.getByText('Create New Customer Account')
-
     }
 
     /**

@@ -9,10 +9,6 @@ export class HelperBase {
         this.page = page
     }
 
-    async waitForNumberOfSeconds(timeInSeconds: number) {
-        await this.page.waitForTimeout(timeInSeconds * 1000)
-    }
-
     /**
      * Asynchronously selects a product on the page, specifying its code, size, and color. 
      * Adds the configured product to the cart.
@@ -24,9 +20,9 @@ export class HelperBase {
      */
     async chooseProductWithSizeAndColor(productCode: string, size: string, color: string) {
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).click()
-        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).getAttribute('aria-checked')).toBeTruthy()
+        expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).click()
-        await expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).getAttribute('aria-checked')).toBeTruthy()
+        expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
     }
 

@@ -15,9 +15,8 @@ test('Removing item completely from the cart in the cart menu', async ({ page })
     await pm.navigateTo().signInPage() // Navigate to sign-in
     await expect(pm.onSignInPage().loginPageTitle).toBeVisible()
 
-    pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
-
-    expect(pm.onHomepage().bannerTitleWhenLoggedin).toHaveText('Click “Write for us” link in the footer to submit a guest post')
+    await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
+    expect(await pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
 
     // Record initial cart counter value
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()

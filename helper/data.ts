@@ -1,4 +1,3 @@
-
 // this map is used for navigation through the site
 // each button on the nav bar has its id, they are stored here
 export const navigationMap = {
