@@ -2,16 +2,17 @@ import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
 import { existingUser, product1 } from "../helper/data"
 
+let pm: PageManager
 
 test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page);
+    // let pm: any
+    pm = new PageManager(page);  // Create a page manager for interactions
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
 test('Removing item completely from the cart in the cart menu', async ({ page }) => {
     // Setup:
-    const pm = new PageManager(page)  // Create a page manager for interactions
     await pm.navigateTo().signInPage() // Navigate to sign-in
     await expect(pm.onSignInPage().loginPageTitle).toBeVisible()
 

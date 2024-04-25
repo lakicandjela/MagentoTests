@@ -2,9 +2,11 @@ import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
 import { existingUser } from "../helper/data"
 
+let pm: PageManager
+
 
 test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page);
+    pm = new PageManager(page);   // Create a page manager for interactions
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
@@ -12,7 +14,6 @@ test.beforeEach(async ({ page }) => {
 
 test('Error message is there while registering with existing email', async ({ page }) => {
     // Setup:
-    const pm = new PageManager(page); // Create a PageManager for page interactions
     await pm.navigateTo().createAccountPage(); // Go to the account creation page
     expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
 

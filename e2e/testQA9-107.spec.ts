@@ -1,14 +1,15 @@
 import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
 
+let pm: PageManager
+
 test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page)
+    pm = new PageManager(page)   // Create a page manager for interactions
     await page.goto('/')
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
 test('Error message while log in with incorrect credentials', async ({ page }) => {
-    const pm = new PageManager(page)  // Create a page manager for interactions
     await pm.navigateTo().signInPage() // Navigate to sign-in
     expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
 
