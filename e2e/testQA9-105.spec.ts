@@ -113,9 +113,9 @@ test.describe('Items stay in cart after login with items from before', () => {
         await pm.onHomepage().openUserMenuButton.click()
         expect(pm.onHomepage().signOutButton).toBeVisible()
         await pm.onHomepage().signOutButton.click() // Log out
-        expect(page.getByText('You are signed out')).toBeVisible()
+        expect(pm.onHomepage().signedOutPageTitle).toBeVisible()
         await pm.onHomepage().storeLogo.click() // Go to home page
-        expect(page.getByText('Hot Sellers')).toBeVisible()
+        expect(pm.onHomepage().hotSellersTitle).toBeVisible()
     })
 
 

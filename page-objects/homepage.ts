@@ -17,6 +17,8 @@ export class Homepage {
     readonly openUserMenuButton: Locator
     readonly signOutButton: Locator
     readonly openUserMenu: Locator
+    readonly signedOutPageTitle: Locator
+    readonly hotSellersTitle: Locator
 
     constructor(page: Page) {
         this.page = page;
@@ -34,6 +36,7 @@ export class Homepage {
         this.openUserMenuButton = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
         this.signOutButton = page.getByRole('link', { name: 'Sign Out' })
         this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
-
+        this.signedOutPageTitle = page.getByText('You are signed out')
+        this.hotSellersTitle = page.getByText('Hot Sellers')
     }
 }
