@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { product1 } from '../helper/data';
+import { PageManager } from './pageManager';
 
 
 export class Homepage {
@@ -41,30 +42,59 @@ export class Homepage {
         this.hotSellersTitle = page.getByText('Hot Sellers')
     }
 
-    async signOut(pm) {
-        await pm.onHomepage().openUserMenuButton.click()
-        expect(pm.onHomepage().signOutButton).toBeVisible()
-        await pm.onHomepage().signOutButton.click() // Log out
-        expect(pm.onHomepage().signedOutPageTitle).toBeVisible()
-        await pm.onHomepage().storeLogo.click() // Go to home page
-        expect(pm.onHomepage().hotSellersTitle).toBeVisible()
+    async signOut() {
+        // Open the user menu
+        await this.openUserMenuButton.click()
+        expect(this.signOutButton).toBeVisible() // Verify sign-out option is available
+
+        // Click the sign-out button
+        await this.signOutButton.click()
+        expect(this.signedOutPageTitle).toBeVisible() // Verify sign-out was successful
+
+        // Navigate to the home page
+        await this.storeLogo.click()
+        expect(this.hotSellersTitle).toBeVisible() // Confirm arrival at the home page
     }
 
-    async goToSiteAndAddProduct(pm, counterBefore, numOfProductsBefore) {
-        await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
-
-        // Record initial cart counter value
-        counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
+    /**
+     * Adds a product to the cart and updates the counter and number of products variables.
+     * @param {PageManager} pm - The PageManager instance.
+     * @param {*} counterBefore - The initial value of the cart counter.
+     * @param {number} numOfProductsBefore - The initial number of products in the cart.
+     * @returns {Object} An object containing the updated counterBefore and numOfProductsBefore values.
+     */
+    async AddProductAndUpdateVariables(pm, counterBefore, numOfProductsBefore) {
+        // Record cart counter value
+        counterBefore = await this.cartCounterLocator.textContent()
 
         // Open the cart menu
-        await pm.onHomepage().minicartButton.click()
-        expect(pm.onHomepage().closeMinicartButton).toBeVisible()
+        await this.minicartButton.click()
+        expect(this.closeMinicartButton).toBeVisible()
 
-        numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
+        // Get the number of products in the minicart
+        numOfProductsBefore = Number(await this.numOfProductsInMinicartText.innerText())
 
         // Add product
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
-        return {counterBefore, numOfProductsBefore}
+        return { counterBefore, numOfProductsBefore }
+    }
+
+    async emptyCart() {
+        // Click 'Remove' button
+        await this.removeFromCartButton.click()
+        expect(this.removeFromCartPopupQuestionTitle).toBeVisible()
+
+        // Accept action in dialog window
+        await this.approveRemovalFromCartButton.click()
+        await expect(this.cartIsEmptyText).toBeVisible()
+    }
+
+    async assertCartCounterUpdated(initialCounter) {
+        // Verifies that the cart counter has changed after an item has been added, 
+        // indicating that the product was successfully placed in the cart.
+        await expect(async () => {
+            expect(await this.cartCounterLocator.textContent()).not.toEqual(initialCounter)
+        }).toPass()
     }
 }

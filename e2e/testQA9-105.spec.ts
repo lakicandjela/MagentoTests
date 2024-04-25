@@ -1,6 +1,7 @@
 import { test, expect, Page } from "@playwright/test"
 import { PageManager } from "../page-objects/pageManager"
-import { existingUser, product1 } from "../helper/data"
+import { product1 } from "../helper/data"
+
 
 let pm: PageManager
 
@@ -12,27 +13,22 @@ test.describe('Items stay in cart after login or create account', () => {
         await page.goto('/')
         await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 
-        // Record initial cart counter value
-        counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
-
-        // Open the cart menu
-        await pm.onHomepage().minicartButton.click()
-        expect(pm.onHomepage().closeMinicartButton).toBeVisible()
-
-        numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
-
-        // Add product
-        await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+        // Call function and capture returned values
+        const { 
+            counterBefore: updatedCounterBefore, 
+            numOfProductsBefore: updatedNumOfProductsBefore 
+        } = await pm.onHomepage()
+            .AddProductAndUpdateVariables(pm, counterBefore, numOfProductsBefore)
+             
+        // Update the variables with the returned values
+        counterBefore = updatedCounterBefore;
+        numOfProductsBefore = updatedNumOfProductsBefore;
     })
 
     test('Items stay in cart after login', async ({ page }) => {
-        // Sign in
-        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
+        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm) // Sign in
 
-        // Verify product added by checking cart counter change
-        await expect(async () => {
-            expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
-        }).toPass();
+        await pm.onHomepage().assertCartCounterUpdated(counterBefore)
 
         // Open the cart menu
         await pm.onHomepage().minicartButton.click()
@@ -44,17 +40,13 @@ test.describe('Items stay in cart after login or create account', () => {
     })
 
     test('Items stay in cart after create an account', async ({ page }) => {
-        pm.onCreateAccountPage().goToCreateaccountAndSignUpWithRandomUser(pm)
+        pm.onCreateAccountPage().goToCreateaccountAndSignUpWithRandomUser(pm) // Create a new account
 
-        // Verify product added by checking cart counter change
-        await expect(async () => {
-            expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
-        }).toPass();
+        await pm.onHomepage().assertCartCounterUpdated(counterBefore)
 
         // Open the cart menu
         await pm.onHomepage().minicartButton.click()
         expect(pm.onHomepage().closeMinicartButton).toBeVisible()
-
         const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
         expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
@@ -70,11 +62,11 @@ test.describe('Items stay in cart after login with items from before', () => {
         await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
         
         ///////////////////////////////// Sign up, and add a product to cart
-        // Sign in
-        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
+        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm) // Sign in
 
         // Add product
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+
         // Verify product added by checking cart counter change
         await expect(async () => {
             await expect(pm.onHomepage().linkToCartMessageWhenProductAdded).toBeVisible();
@@ -86,7 +78,7 @@ test.describe('Items stay in cart after login with items from before', () => {
         numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
         // Sign out
-        pm.onHomepage().signOut(pm)
+        pm.onHomepage().signOut()
     })
 
 
@@ -101,10 +93,7 @@ test.describe('Items stay in cart after login with items from before', () => {
         // Sign in
         pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 
-        // Verify product added by checking cart counter change
-        await expect(async () => {
-            expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
-        }).toPass();
+        await pm.onHomepage().assertCartCounterUpdated(counterBefore)
 
         // Open the cart menu
         await pm.onHomepage().minicartButton.click()
@@ -119,11 +108,5 @@ test.describe('Items stay in cart after login with items from before', () => {
 })
 
 test.afterEach(async ({ page }) => {
-    // Click 'Remove' button
-    await pm.onHomepage().removeFromCartButton.click()
-    expect(pm.onHomepage().removeFromCartPopupQuestionTitle).toBeVisible()
-
-    // Accept action in dialog window
-    await pm.onHomepage().approveRemovalFromCartButton.click()
-    await expect(pm.onHomepage().cartIsEmptyText).toBeVisible()
+    await pm.onHomepage().emptyCart()
 })
