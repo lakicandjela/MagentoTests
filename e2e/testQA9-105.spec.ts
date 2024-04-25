@@ -16,15 +16,18 @@ test('Items stay in cart after login', async ({ page }) => {
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
-    await pm.onHomepage().minicartButton.click()
+    await pm.onHomepage().minicartButton.click() //////////////////////////////
 
     const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
     // Add product
-    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color) //////////////
 
     await pm.navigateTo().signInPage()
+    expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
     pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
+    // expect(pm.onHomepage().bannerTitleWhenLoggedin).toHaveText('Click “Write for us” link in the footer to submit a guest post')
+    
 
     // Verify product added by checking cart counter change
     await expect(async () => {
@@ -32,7 +35,7 @@ test('Items stay in cart after login', async ({ page }) => {
     }).toPass();
 
     // Open the cart menu
-    await pm.onHomepage().minicartButton.click()
+    await pm.onHomepage().minicartButton.click() ///////////////////////////////
     const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
     expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
@@ -46,7 +49,7 @@ test('Items stay in cart after create an account', async ({ page }) => {
     const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
-    await pm.onHomepage().closeMinicartButton.click()
+    await pm.onHomepage().minicartButton.click()
 
     const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
@@ -79,53 +82,63 @@ test('Items stay in cart after create an account', async ({ page }) => {
     expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
 })
 
-test('Items stay in cart after login with items from before', async ({ page }) => {
-    const pm = new PageManager(page)  // Create a page manager for interactions
-    ///////////////////////////////// Sign up, and add a product to cart
-    await pm.navigateTo().signInPage()
-    await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
 
-    // Record initial cart counter value
-    var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
-    // Add product
-    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
-    // Verify product added by checking cart counter change
-    await expect(async () => {
-        await expect(await pm.onHomepage().linkToCartMessageWhenProductAdded).toBeVisible();
-    }).toPass();
+test.describe('Items stay in cart after login with items from before', () => {
+    let numOfProductsBefore: number;
 
-    // get the current number of products in cart
-    await pm.onHomepage().minicartButton.click()
-    const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
+    test.beforeEach(async ({ page }) => {
+        const pm = new PageManager(page)
+        ///////////////////////////////// Sign up, and add a product to cart
+        await pm.navigateTo().signInPage()
+        await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
 
-    await pm.onHomepage().openUserMenuButton.click()
-    await pm.onHomepage().signOutButton.click() // Log out
-    await pm.onHomepage().storeLogo.click() // Go to home page
+        // Record initial cart counter value
+        var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
-    ///////////////////////////////// Now, while logged out, user adds something in cart
-    // Update cart counter value
-    var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
+        // Add product
+        await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+        // Verify product added by checking cart counter change
+        await expect(async () => {
+            await expect(pm.onHomepage().linkToCartMessageWhenProductAdded).toBeVisible();
+        }).toPass();
 
-    // Add product
-    await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+        // get the current number of products in cart
+        await pm.onHomepage().minicartButton.click()
+        numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
-    await pm.navigateTo().signInPage()
-    pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
+        await pm.onHomepage().openUserMenuButton.click()
+        await pm.onHomepage().signOutButton.click() // Log out
+        await pm.onHomepage().storeLogo.click() // Go to home page
+    })
 
-    // Verify product added by checking cart counter change
-    await expect(async () => {
-        expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
-    }).toPass();
 
-    // Open the cart menu
-    await pm.onHomepage().minicartButton.click()
-    const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
+    test('Items stay in cart after login with items from before', async ({ page }) => {
+        const pm = new PageManager(page)
+        ///////////////////////////////// Now, while logged out, user adds something in cart
+        // Update cart counter value
+        var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
-    // while the user was logged out, he added only 1 product, so when logged back in the total
-    // should be the the memorized number of products he had in his cart already before + that one product 
-    // added while logged out
-    expect(numOfProductsAfter).toEqual(numOfProductsBefore + 1)
+        // Add product
+        await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+
+        await pm.navigateTo().signInPage()
+        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
+
+        // Verify product added by checking cart counter change
+        await expect(async () => {
+            expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
+        }).toPass();
+
+        // Open the cart menu
+        await pm.onHomepage().minicartButton.click()
+        const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
+
+        // while the user was logged out, he added only 1 product, so when logged back in the total
+        // should be the the memorized number of products he had in his cart already before + that one product 
+        // added while logged out
+        expect(numOfProductsAfter).toEqual(numOfProductsBefore + 1)
+    })
 })
 
 test.afterEach(async ({ page }) => {
@@ -134,5 +147,5 @@ test.afterEach(async ({ page }) => {
     await pm.onHomepage().removeFromCartButton.click()
 
     // Accept action in dialog window
-    await pm.onHomepage().removeFromCartPopupQuestionTitle.click()
+    await pm.onHomepage().approveRemovalFromCartButton.click()
 })
