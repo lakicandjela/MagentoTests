@@ -1,5 +1,6 @@
-import { Page, Locator } from '@playwright/test'
+import { Page, Locator, expect } from '@playwright/test'
 import { HelperBase } from './helperBase'
+import { existingUser } from '../helper/data'
 
 export class SignInPage extends HelperBase {
     readonly loginPageTitle: Locator
@@ -22,6 +23,13 @@ export class SignInPage extends HelperBase {
         await this.page.locator('#email').fill(email)
         await this.page.locator('#pass').fill(password)
         await this.page.locator('#send2').click()
+    }
+
+    async goToLoginPageAndLoginWithExistingUser(pm) {
+        await pm.navigateTo().signInPage()
+        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
+        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
+        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
     }
 
 }

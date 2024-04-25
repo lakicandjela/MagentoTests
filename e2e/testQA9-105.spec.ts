@@ -27,10 +27,7 @@ test.describe('Items stay in cart after login or create account', () => {
 
     test('Items stay in cart after login', async ({ page }) => {
         // Sign in
-        await pm.navigateTo().signInPage()
-        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
+        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 
         // Verify product added by checking cart counter change
         await expect(async () => {
@@ -47,21 +44,7 @@ test.describe('Items stay in cart after login or create account', () => {
     })
 
     test('Items stay in cart after create an account', async ({ page }) => {
-        await pm.navigateTo().createAccountPage()
-        expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
-
-        // Generate a random user
-        const user = pm.fromHelperBase().genRandomUser();
-
-        // Attempt to create an account
-        await pm.onCreateAccountPage().createAccountWithCredentials(
-            (await user).firstName,
-            (await user).lastName,
-            (await user).email,
-            (await user).password,
-            (await user).password
-        );
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user has created an account
+        pm.onCreateAccountPage().goToCreateaccountAndSignUpWithRandomUser(pm)
 
         // Verify product added by checking cart counter change
         await expect(async () => {
@@ -78,8 +61,6 @@ test.describe('Items stay in cart after login or create account', () => {
     })
 })
 
-
-
 test.describe('Items stay in cart after login with items from before', () => {
     let numOfProductsBefore: number;
 
@@ -90,10 +71,7 @@ test.describe('Items stay in cart after login with items from before', () => {
         
         ///////////////////////////////// Sign up, and add a product to cart
         // Sign in
-        await pm.navigateTo().signInPage()
-        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
+        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 
         // Add product
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
@@ -108,12 +86,7 @@ test.describe('Items stay in cart after login with items from before', () => {
         numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
         // Sign out
-        await pm.onHomepage().openUserMenuButton.click()
-        expect(pm.onHomepage().signOutButton).toBeVisible()
-        await pm.onHomepage().signOutButton.click() // Log out
-        expect(pm.onHomepage().signedOutPageTitle).toBeVisible()
-        await pm.onHomepage().storeLogo.click() // Go to home page
-        expect(pm.onHomepage().hotSellersTitle).toBeVisible()
+        pm.onHomepage().signOut(pm)
     })
 
 
@@ -126,10 +99,7 @@ test.describe('Items stay in cart after login with items from before', () => {
         await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
         // Sign in
-        await pm.navigateTo().signInPage()
-        expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-        pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
+        pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 
         // Verify product added by checking cart counter change
         await expect(async () => {

@@ -1,4 +1,5 @@
-import { Page, Locator } from '@playwright/test'
+import { Page, Locator, expect } from '@playwright/test'
+import { product1 } from '../helper/data';
 
 
 export class Homepage {
@@ -38,5 +39,32 @@ export class Homepage {
         this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
         this.signedOutPageTitle = page.getByText('You are signed out')
         this.hotSellersTitle = page.getByText('Hot Sellers')
+    }
+
+    async signOut(pm) {
+        await pm.onHomepage().openUserMenuButton.click()
+        expect(pm.onHomepage().signOutButton).toBeVisible()
+        await pm.onHomepage().signOutButton.click() // Log out
+        expect(pm.onHomepage().signedOutPageTitle).toBeVisible()
+        await pm.onHomepage().storeLogo.click() // Go to home page
+        expect(pm.onHomepage().hotSellersTitle).toBeVisible()
+    }
+
+    async goToSiteAndAddProduct(pm, counterBefore, numOfProductsBefore) {
+        await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
+
+        // Record initial cart counter value
+        counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
+
+        // Open the cart menu
+        await pm.onHomepage().minicartButton.click()
+        expect(pm.onHomepage().closeMinicartButton).toBeVisible()
+
+        numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
+
+        // Add product
+        await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
+
+        return {counterBefore, numOfProductsBefore}
     }
 }
