@@ -13,14 +13,14 @@ test('Items stay in cart after login', async ({ page }) => {
     const pm = new PageManager(page)
 
     // Record initial cart counter value
-    const counter_before = await page.locator('.counter-number').textContent()
+    const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
+    await pm.onHomepage().minicartButton.click()
 
-    const numOfProductsBefore = Number(await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText())
+    const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
-    // Add product using helper function
+    // Add product
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
 
     await pm.navigateTo().signInPage()
@@ -28,14 +28,14 @@ test('Items stay in cart after login', async ({ page }) => {
 
     // Verify product added by checking cart counter change
     await expect(async () => {
-        await expect(await page.locator('.counter-number').textContent()).not.toEqual(counter_before);
+        expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
     }).toPass();
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
-    const numOfProductsAfter = Number((await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText()))
+    await pm.onHomepage().minicartButton.click()
+    const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
-    await expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
+    expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
 
 })
 
@@ -43,12 +43,12 @@ test('Items stay in cart after create an account', async ({ page }) => {
     const pm = new PageManager(page)
 
     // Record initial cart counter value
-    const counter_before = await page.locator('.counter-number').textContent()
+    const counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
+    await pm.onHomepage().closeMinicartButton.click()
 
-    const numOfProductsBefore = Number(await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText())
+    const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
     // Add product using helper function
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
@@ -69,14 +69,14 @@ test('Items stay in cart after create an account', async ({ page }) => {
 
     // Verify product added by checking cart counter change
     await expect(async () => {
-        await expect(await page.locator('.counter-number').textContent()).not.toEqual(counter_before);
+        expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
     }).toPass();
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
-    const numOfProductsAfter = Number((await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText()))
+    await pm.onHomepage().minicartButton.click()
+    const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
-    await expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
+    expect(numOfProductsAfter).not.toEqual(numOfProductsBefore)
 })
 
 test('Items stay in cart after login with items from before', async ({ page }) => {
@@ -86,27 +86,26 @@ test('Items stay in cart after login with items from before', async ({ page }) =
     await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password) // Sign in
 
     // Record initial cart counter value
-    var counter_before = await page.locator('.counter-number').textContent()
+    var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Add product
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
     // Verify product added by checking cart counter change
     await expect(async () => {
-        // await expect(await page.locator('.counter-number').textContent()).not.toEqual(counter_before);
-        await expect(await page.getByRole('link', { name: 'shopping cart' })).toBeVisible();
+        await expect(await pm.onHomepage().linkToCartMessageWhenProductAdded).toBeVisible();
     }).toPass();
 
     // get the current number of products in cart
-    await page.locator('[class="minicart-wrapper"]').click()
-    const numOfProductsBefore = Number(await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText())
+    await pm.onHomepage().minicartButton.click()
+    const numOfProductsBefore = Number(await pm.onHomepage().numOfProductsInMinicartText.innerText())
 
-    await page.getByRole('banner').locator('button').filter({ hasText: 'Change' }).click()
-    await page.getByRole('link', { name: 'Sign Out' }).click() // Log out
-    await page.getByLabel('store logo').click() // Go to home page
+    await pm.onHomepage().openUserMenuButton.click()
+    await pm.onHomepage().signOutButton.click() // Log out
+    await pm.onHomepage().storeLogo.click() // Go to home page
 
     ///////////////////////////////// Now, while logged out, user adds something in cart
     // Update cart counter value
-    var counter_before = await page.locator('.counter-number').textContent()
+    var counterBefore = await pm.onHomepage().cartCounterLocator.textContent()
 
     // Add product
     await pm.fromHelperBase().chooseProductWithSizeAndColor(product1.code, product1.size, product1.color)
@@ -116,23 +115,24 @@ test('Items stay in cart after login with items from before', async ({ page }) =
 
     // Verify product added by checking cart counter change
     await expect(async () => {
-        await expect(await page.locator('.counter-number').textContent()).not.toEqual(counter_before);
+        expect(await pm.onHomepage().cartCounterLocator.textContent()).not.toEqual(counterBefore);
     }).toPass();
 
     // Open the cart menu
-    await page.locator('[class="minicart-wrapper"]').click()
-    const numOfProductsAfter = Number((await page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]').innerText()))
+    await pm.onHomepage().minicartButton.click()
+    const numOfProductsAfter = Number((await pm.onHomepage().numOfProductsInMinicartText.innerText()))
 
     // while the user was logged out, he added only 1 product, so when logged back in the total
     // should be the the memorized number of products he had in his cart already before + that one product 
     // added while logged out
-    await expect(numOfProductsAfter).toEqual(numOfProductsBefore + 1)
+    expect(numOfProductsAfter).toEqual(numOfProductsBefore + 1)
 })
 
 test.afterEach(async ({ page }) => {
+    const pm = new PageManager(page)
     // Click 'Remove' button
-    await page.getByText('Remove').click()
+    await pm.onHomepage().removeFromCartButton.click()
 
     // Accept action in dialog window
-    await page.locator('[class="action-primary action-accept"]').click()
+    await pm.onHomepage().removeFromCartPopupQuestionTitle.click()
 })

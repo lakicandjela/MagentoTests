@@ -12,6 +12,10 @@ export class Homepage {
     readonly closeMinicartButton: Locator
     readonly removeFromCartPopupQuestionTitle: Locator
     readonly storeLogo: Locator
+    readonly numOfProductsInMinicartText: Locator
+    readonly linkToCartMessageWhenProductAdded: Locator
+    readonly openUserMenuButton: Locator
+    readonly signOutButton: Locator
 
     constructor(page: Page) {
         this.page = page;
@@ -24,5 +28,10 @@ export class Homepage {
         this.closeMinicartButton = page.locator('#btn-minicart-close')
         this.removeFromCartPopupQuestionTitle = page.getByText('Are you sure you would like')
         this.storeLogo = page.getByLabel('store logo')
+        this.numOfProductsInMinicartText = page.locator('#minicart-content-wrapper').locator('[title="Items in Cart"]')
+        this.linkToCartMessageWhenProductAdded = page.getByRole('link', { name: 'shopping cart' })
+        this.openUserMenuButton = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
+        this.signOutButton = page.getByRole('link', { name: 'Sign Out' })
+
     }
 }
