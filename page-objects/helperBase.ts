@@ -65,7 +65,8 @@ export class HelperBase {
     */
     async fillReview(userReview) {
         await this.page.getByRole('link', { name: 'Add Your Review' }).click()
-        await this.page.locator('[class="control review-control-vote"]').locator(`#Rating_${userReview.rating}`).click({ force: true })
+        // await this.page.locator('[class="control review-control-vote"]').locator(`#Rating_${userReview.rating}`).click({ force: true })
+        await this.page.getByTitle(`${userReview.rating} star`).click({ force: true })
         await this.page.getByLabel('Nickname').fill(userReview.nickname)
         await this.page.getByLabel('Summary').fill(userReview.summary)
         await this.page.getByLabel('Review', { exact: true }).fill(userReview.review)

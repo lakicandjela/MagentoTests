@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 
     // Sign in
-    pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
+    await pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 })
 
 test('Leave a review', async ({ page }) => {
@@ -21,5 +21,5 @@ test('Leave a review', async ({ page }) => {
     await pm.fromHelperBase().fillReview(review1)
 
     // Verify review submission success:
-    await expect(page.getByText('You submitted your review for')).toBeVisible()
+    await expect(pm.onHomepage().successfulReviewMessage).toBeVisible()
 })

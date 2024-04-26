@@ -13,6 +13,8 @@ export class Homepage {
     readonly removeFromCartPopupQuestionTitle: Locator
     readonly storeLogo: Locator
     readonly openUserMenu: Locator
+    readonly successfulReviewMessage: Locator
+
 
     constructor(page: Page) {
         this.page = page;
@@ -26,5 +28,6 @@ export class Homepage {
         this.removeFromCartPopupQuestionTitle = page.getByText('Are you sure you would like')
         this.storeLogo = page.getByLabel('store logo')
         this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
+        this.successfulReviewMessage = page.getByRole('alert').getByText('You submitted your review for')
     }
 }

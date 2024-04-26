@@ -33,6 +33,6 @@ export class SignInPage extends HelperBase {
         await pm.navigateTo().signInPage()
         expect(this.loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
         this.signInWithCredentials(existingUser.email, existingUser.password)
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
+        expect(await pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
     }
 }
