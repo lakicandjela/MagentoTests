@@ -63,13 +63,13 @@ export class Homepage {
      * @param {number} numOfProductsBefore - The initial number of products in the cart.
      * @returns {Object} An object containing the updated counterBefore and numOfProductsBefore values.
      */
-    async AddProductAndUpdateVariables(pm, counterBefore, numOfProductsBefore) {
+    async addProductAndUpdateVariables(pm, counterBefore, numOfProductsBefore) {
         // Record cart counter value
         counterBefore = await this.cartCounterLocator.textContent()
 
         // Open the cart menu
         await this.minicartButton.click()
-        expect(this.closeMinicartButton).toBeVisible()
+        expect(this.closeMinicartButton).toBeVisible() // Verify that the cart is opened
 
         // Get the number of products in the minicart
         numOfProductsBefore = Number(await this.numOfProductsInMinicartText.innerText())
@@ -83,18 +83,33 @@ export class Homepage {
     async emptyCart() {
         // Click 'Remove' button
         await this.removeFromCartButton.click()
-        expect(this.removeFromCartPopupQuestionTitle).toBeVisible()
+        expect(this.removeFromCartPopupQuestionTitle).toBeVisible() // Verify that a dialog window is opened
 
         // Accept action in dialog window
         await this.approveRemovalFromCartButton.click()
-        await expect(this.cartIsEmptyText).toBeVisible()
+        await expect(this.cartIsEmptyText).toBeVisible() // Verify that the action is successful
     }
 
+    /**
+     * Verifies that the cart counter has changed after an item has been added, 
+     * indicating that the product was successfully placed in the cart.
+     * @param initialCounter - value of counter before the refreshing the cart
+     */
     async assertCartCounterUpdated(initialCounter) {
-        // Verifies that the cart counter has changed after an item has been added, 
-        // indicating that the product was successfully placed in the cart.
         await expect(async () => {
             expect(await this.cartCounterLocator.textContent()).not.toEqual(initialCounter)
         }).toPass()
+    }
+
+    /**
+     * Opens the minicart menu and reads the number of product in cart
+     * @returns number of products found in the cart
+     */
+    async openMinicartAndGetNumberOfItems() {
+        await this.minicartButton.click()
+        expect(this.closeMinicartButton).toBeVisible() // Verify that the cart is opened
+        const numOfProductsAfter = Number((await this.numOfProductsInMinicartText.innerText()))
+
+        return numOfProductsAfter
     }
 }
