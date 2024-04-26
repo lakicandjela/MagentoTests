@@ -44,3 +44,6 @@ export const product1 = {
     size: 'XS',
     color: 'Purple'
 }
+
+// list of keywords to test advanced search by product name
+export const advancedSearchKeywords = ['tank', 'tanks cotton', 'backpack']
