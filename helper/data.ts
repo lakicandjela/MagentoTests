@@ -44,3 +44,11 @@ export const product1 = {
     size: 'XS',
     color: 'Purple'
 }
+
+// data for filling a review
+export const review1 = {
+    rating: 1,
+    nickname: 'Jane',
+    summary: 'Cool t-shirt',
+    review: 'it is a cool t-shirt'
+}

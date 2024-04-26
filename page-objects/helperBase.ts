@@ -26,6 +26,10 @@ export class HelperBase {
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()
     }
 
+    async clickOnProduct(productCode: string) {
+        await this.page.locator('li').filter({ hasText: productCode }).click()
+    }
+
     /**
      * Asynchronously generates a randomized user object with first name, last name, email, and password.
      * 
@@ -47,6 +51,26 @@ export class HelperBase {
             email: email,
             password: password
         }
+    }
+
+    /*
+    * Purpose: Asynchronously fills out and submits a product review form.
+    * 
+    * Parameters:
+    *   userReview (object): An object containing the review details:
+    *     * rating (number): The user's star rating for the product.
+    *     * nickname (string): The user's chosen nickname.  
+    *     * summary (string): A brief summary of the review.
+    *     * review (string): The full text of the review.
+    */
+    async fillReview(userReview) {
+        await this.page.getByRole('link', { name: 'Add Your Review' }).click()
+        // await this.page.locator('[class="control review-control-vote"]').locator(`#Rating_${userReview.rating}`).click({ force: true })
+        await this.page.getByTitle(`${userReview.rating} star`).click({ force: true })
+        await this.page.getByLabel('Nickname').fill(userReview.nickname)
+        await this.page.getByLabel('Summary').fill(userReview.summary)
+        await this.page.getByLabel('Review', { exact: true }).fill(userReview.review)
+        await this.page.getByLabel('Reviews').locator('button').click()
     }
 
 }
