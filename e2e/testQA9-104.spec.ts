@@ -10,10 +10,7 @@ test.beforeEach(async ({ page }) => {
     await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
 
     // Sign in
-    await pm.navigateTo().signInPage()
-    expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
-    await pm.onSignInPage().signInWithCredentials(existingUser.email, existingUser.password)
-    expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user is successfuly signed in
+    pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 })
 
 test('Leave a review', async ({ page }) => {
