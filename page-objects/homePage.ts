@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { product1 } from '../helper/data';
+import { PageManager } from './pageManager';
 
 export class HomePage {
     readonly page: Page;
@@ -19,6 +20,8 @@ export class HomePage {
     readonly openUserMenu: Locator
     readonly signedOutPageTitle: Locator
     readonly hotSellersTitle: Locator
+    readonly successfulReviewMessage: Locator
+    readonly advancedSearchLink: Locator
 
     constructor(page: Page) {
         this.page = page;
@@ -38,6 +41,8 @@ export class HomePage {
         this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
         this.signedOutPageTitle = page.getByText('You are signed out')
         this.hotSellersTitle = page.getByText('Hot Sellers')
+        this.successfulReviewMessage = page.getByRole('alert').getByText('You submitted your review for')
+        this.advancedSearchLink = page.getByRole('link', { name: 'Advanced Search' })
     }
 
     async signOut() {
@@ -61,7 +66,7 @@ export class HomePage {
      * @param {number} numOfProductsBefore - The initial number of products in the cart.
      * @returns {Object} An object containing the updated counterBefore and numOfProductsBefore values.
      */
-    async addProductAndUpdateVariables(pm, counterBefore, numOfProductsBefore) {
+    async addProductAndUpdateVariables(pm: PageManager, counterBefore: any, numOfProductsBefore: number) {
         // Record cart counter value
         counterBefore = await this.cartCounterLocator.textContent()
 
