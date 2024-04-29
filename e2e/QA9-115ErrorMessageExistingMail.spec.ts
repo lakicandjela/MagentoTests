@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 
-test('Is there an error message while registering with existing email', async ({ page }) => {
+test('Is there an error message while registering with existing email', async ({ }) => {
     // Setup:
     await pm.navigateTo().createAccountPage(); // Go to the account creation page
     expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
@@ -30,5 +30,5 @@ test('Is there an error message while registering with existing email', async ({
     );
 
     // Assert that the expected error message is displayed 
-    await expect(page.getByText('There is already')).toBeVisible();
+    await expect(pm.onCreateAccountPage().errorMessageExistingMail).toBeVisible();
 });

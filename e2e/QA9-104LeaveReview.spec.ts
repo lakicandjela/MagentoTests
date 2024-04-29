@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
     await pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm)
 })
 
-test('Verify that a product review could be made', async ({ page }) => {
+test('Verify that a product review could be made', async ({ }) => {
     // Navigate to the product details page:
     await pm.fromHelperBase().clickOnProduct(product1.code)
 

@@ -24,7 +24,7 @@ test.describe('Do items added while logged out stay in cart after login or creat
         numOfProductsBefore = updatedNumOfProductsBefore;
     })
 
-    test('Do items added while loged out stay in cart after login', async ({ page }) => {
+    test('Do items added while loged out stay in cart after login', async ({ }) => {
         pm.onSignInPage().goToLoginPageAndLoginWithExistingUser(pm) // Sign in
 
         // Verify product added
@@ -37,7 +37,7 @@ test.describe('Do items added while logged out stay in cart after login or creat
 
     })
 
-    test('Do items added while logged out stay in cart after create an account', async ({ page }) => {
+    test('Do items added while logged out stay in cart after create an account', async ({ }) => {
         pm.onCreateAccountPage().goToCreateaccountAndSignUpWithRandomUser(pm) // Create a new account
 
         // Verify product added
@@ -80,7 +80,7 @@ test.describe('Do items added while logged out stay in cart after login with ite
     })
 
 
-    test('Do items added while logged out stay in cart after login with items added before while logged in', async ({ page }) => {
+    test('Do items added while logged out stay in cart after login with items added before while logged in', async ({ }) => {
         /*
             Now, while logged out, user adds something in cart, and log back in afterwards
         */
@@ -108,6 +108,6 @@ test.describe('Do items added while logged out stay in cart after login with ite
     })
 })
 
-test.afterEach(async ({ page }) => {
+test.afterEach(async ({ }) => {
     await pm.onHomePage().emptyCart()
 })

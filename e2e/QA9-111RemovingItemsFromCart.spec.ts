@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     await expect(pm.onHomePage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
-test('Verify that an item can be completely removed from the cart in the cart menu', async ({ page }) => {
+test('Verify that an item can be completely removed from the cart in the cart menu', async ({ }) => {
     // Setup:
     await pm.navigateTo().signInPage() // Navigate to sign-in
     await expect(pm.onSignInPage().loginPageTitle).toBeVisible()
