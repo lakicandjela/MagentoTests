@@ -52,3 +52,6 @@ export const review1 = {
     summary: 'Cool t-shirt',
     review: 'it is a cool t-shirt'
 }
+
+// list of keywords to test advanced search by product name
+export const advancedSearchKeywords = ['tank', 'tanks cotton', 'backpack']

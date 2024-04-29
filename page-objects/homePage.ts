@@ -13,6 +13,7 @@ export class HomePage {
     readonly removeFromCartPopupQuestionTitle: Locator
     readonly storeLogo: Locator
     readonly openUserMenu: Locator
+    readonly advancedSearchLink: Locator
     readonly successfulReviewMessage: Locator
 
 
@@ -28,6 +29,7 @@ export class HomePage {
         this.removeFromCartPopupQuestionTitle = page.getByText('Are you sure you would like')
         this.storeLogo = page.getByLabel('store logo')
         this.openUserMenu = page.getByRole('banner').locator('button').filter({ hasText: 'Change' })
+        this.advancedSearchLink = page.getByRole('link', { name: 'Advanced Search' })
         this.successfulReviewMessage = page.getByRole('alert').getByText('You submitted your review for')
     }
 }

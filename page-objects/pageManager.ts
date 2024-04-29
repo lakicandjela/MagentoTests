@@ -5,6 +5,7 @@ import { CreateAccountPage } from './createAccountPage'
 import { CheckoutPage } from './checkoutPage'
 import { HelperBase } from './helperBase'
 import { HomePage } from './homePage'
+import { AdvancedSearchPage } from './advancedSearchPage'
 
 export class PageManager {
     /**
@@ -20,6 +21,7 @@ export class PageManager {
     private readonly checkoutPage: CheckoutPage
     private readonly helperBase: HelperBase
     private readonly homepage: HomePage
+    private readonly advancedSearchPage: AdvancedSearchPage
 
     constructor(page: Page) {
         this.page = page
@@ -29,6 +31,7 @@ export class PageManager {
         this.checkoutPage = new CheckoutPage(this.page)
         this.helperBase = new HelperBase(this.page)
         this.homepage = new HomePage(this.page)
+        this.advancedSearchPage = new AdvancedSearchPage(page)
     }
 
     navigateTo() {
@@ -53,5 +56,9 @@ export class PageManager {
 
     onHomePage() {
         return this.homepage
+    }
+
+    onAdvancedSearchPage() {
+        return this.advancedSearchPage
     }
 }
