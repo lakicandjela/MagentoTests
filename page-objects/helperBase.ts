@@ -19,8 +19,8 @@ export class HelperBase {
      *  
      */
     async chooseProductWithSizeAndColor(productCode: string, size: string, color: string) {
-        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).click()
-        expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size).getAttribute('aria-checked')).toBeTruthy()
+        await this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, { exact: true }).click()
+        expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(size, { exact: true }).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).click()
         expect(this.page.locator('li').filter({ hasText: productCode }).getByLabel(color).getAttribute('aria-checked')).toBeTruthy()
         await this.page.locator('li').filter({ hasText: productCode }).getByText('Add to Cart').click()

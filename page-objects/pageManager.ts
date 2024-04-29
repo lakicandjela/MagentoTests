@@ -55,6 +55,7 @@ export class PageManager {
     }
 
     onHomePage() {
+    onHomePage() {
         return this.homepage
     }
 

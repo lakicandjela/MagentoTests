@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test'
+import { Page, Locator, expect } from '@playwright/test'
 import { HelperBase } from './helperBase'
 
 export class CreateAccountPage extends HelperBase {
@@ -26,6 +26,24 @@ export class CreateAccountPage extends HelperBase {
         await this.page.locator('#password').fill(password)
         await this.page.locator('#password-confirmation').fill(conf_password)
         await this.page.getByRole('button', { name: 'Create an Account' }).click()
+    }
+
+    async goToCreateaccountAndSignUpWithRandomUser(pm) {
+        await pm.navigateTo().createAccountPage()
+        expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()
+
+        // Generate a random user
+        const user = pm.fromHelperBase().genRandomUser();
+
+        // Attempt to create an account
+        await pm.onCreateAccountPage().createAccountWithCredentials(
+            (await user).firstName,
+            (await user).lastName,
+            (await user).email,
+            (await user).password,
+            (await user).password
+        );
+        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user has created an account
     }
 
 }
