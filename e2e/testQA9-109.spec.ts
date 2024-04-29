@@ -7,14 +7,14 @@ let pm: PageManager
 test.beforeEach(async ({ page }) => {
     pm = new PageManager(page)   // Create a page manager for interactions
     await page.goto('/')
-    await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
+    await expect(pm.onHomePage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
-test('Advanced search for products with expected product name keywords', async ({ page }) => {
+test('Advanced search for products with expected product name keywords', async ({ }) => {
     const keyword = advancedSearchKeywords[0]
 
     // Navigate to the Advanced Search page
-    await pm.onHomepage().advancedSearchLink.click()
+    await pm.onHomePage().advancedSearchLink.click()
     expect(pm.onAdvancedSearchPage().advancedsearchPageTitle).toBeVisible() // Verify page load
 
     // Input the search keyword and initiate search

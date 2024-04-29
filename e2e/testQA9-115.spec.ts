@@ -8,11 +8,11 @@ let pm: PageManager
 test.beforeEach(async ({ page }) => {
     pm = new PageManager(page);   // Create a page manager for interactions
     await page.goto('/')
-    await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
+    await expect(pm.onHomePage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
 
-test('Error message is there while registering with existing email', async ({ page }) => {
+test('Is there an error message while registering with existing email', async ({ page }) => {
     // Setup:
     await pm.navigateTo().createAccountPage(); // Go to the account creation page
     expect(pm.onCreateAccountPage().createAccountPageTitle).toBeVisible()

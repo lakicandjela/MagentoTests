@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test'
 
 
-export class Homepage {
+export class HomePage {
     readonly page: Page;
     readonly cartCounterLocator: Locator
     readonly minicartButton: Locator

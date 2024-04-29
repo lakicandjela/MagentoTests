@@ -6,10 +6,10 @@ let pm: PageManager
 test.beforeEach(async ({ page }) => {
     pm = new PageManager(page)   // Create a page manager for interactions
     await page.goto('/')
-    await expect(pm.onHomepage().storeLogo).toBeVisible() // Assert that the site is opened
+    await expect(pm.onHomePage().storeLogo).toBeVisible() // Assert that the site is opened
 })
 
-test('Error message while log in with incorrect credentials', async ({ page }) => {
+test('Is there an error message while logging in with incorrect credentials', async ({ page }) => {
     await pm.navigateTo().signInPage() // Navigate to sign-in
     expect(pm.onSignInPage().loginPageTitle).toBeVisible() // Assertion that the user is redirected to log in page
 
