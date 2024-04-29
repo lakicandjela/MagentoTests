@@ -1,9 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { product1 } from '../helper/data';
-import { PageManager } from './pageManager';
 
-
-export class Homepage {
+export class HomePage {
     readonly page: Page;
     readonly cartCounterLocator: Locator
     readonly minicartButton: Locator

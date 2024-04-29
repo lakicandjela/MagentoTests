@@ -4,7 +4,7 @@ import { SignInPage } from './signInPage'
 import { CreateAccountPage } from './createAccountPage'
 import { CheckoutPage } from './checkoutPage'
 import { HelperBase } from './helperBase'
-import { Homepage } from './homepage'
+import { HomePage } from './homePage'
 
 export class PageManager {
     /**
@@ -18,7 +18,7 @@ export class PageManager {
     private readonly createAccountPage: CreateAccountPage
     private readonly checkoutPage: CheckoutPage
     private readonly helperBase: HelperBase
-    private readonly homepage: Homepage
+    private readonly homepage: HomePage
 
     constructor(page: Page) {
         this.page = page
@@ -27,7 +27,7 @@ export class PageManager {
         this.createAccountPage = new CreateAccountPage(this.page)
         this.checkoutPage = new CheckoutPage(this.page)
         this.helperBase = new HelperBase(this.page)
-        this.homepage = new Homepage(this.page)
+        this.homepage = new HomePage(this.page)
     }
 
     navigateTo() {
@@ -50,7 +50,7 @@ export class PageManager {
         return this.helperBase
     }
 
-    onHomepage() {
+    onHomePage() {
         return this.homepage
     }
 }
