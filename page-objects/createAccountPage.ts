@@ -43,7 +43,7 @@ export class CreateAccountPage extends HelperBase {
             (await user).password,
             (await user).password
         );
-        expect(pm.onHomepage().openUserMenu).toBeVisible() // Assert that the user has created an account
+        expect(pm.onHomePage().openUserMenu).toBeVisible() // Assert that the user has created an account
     }
 
 }
